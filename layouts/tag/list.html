@@ -1,0 +1,14 @@
+{{ define "main" }}
+  {{ partial "title.html" . }}
+  {{ with partial "get-image-tags.html" . }}
+    <section class="taxonomy-groups">
+      <nav class="tags" aria-label="tags">
+        <ul>
+          {{ range $tag := . }}
+            <li><a href="{{ printf "tag/%s/" $tag | relURL }}">{{ $tag }}</a></li>
+          {{ end }}
+        </ul>
+      </nav>
+    </section>
+  {{ end }}
+{{ end }}

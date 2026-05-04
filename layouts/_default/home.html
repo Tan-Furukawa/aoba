@@ -1,0 +1,29 @@
+{{ define "main" }}
+  {{ $homeTitleFont := site.Params.homeTitleFont | default "noto-serif-jp" | urlize }}
+  {{ with .Resources.GetMatch (.Params.homeHeroImage | default "") }}
+    {{ $image := .Filter (slice images.AutoOrient (images.Process "fit 1600x1200")) }}
+    <section class="home-hero font-{{ $homeTitleFont }}">
+      <figure>
+        <img width="{{ $image.Width }}" height="{{ $image.Height }}" src="{{ $image.RelPermalink }}" alt="" />
+      </figure>
+      {{ if $.Title }}
+        <hgroup>
+          <h1>{{ $.Title }}</h1>
+          {{ with $.Params.Description }}
+            <p>{{ . | markdownify }}</p>
+          {{ end }}
+        </hgroup>
+      {{ end }}
+    </section>
+  {{ else }}
+    {{ partial "title.html" . }}
+  {{ end }}
+  <section class="galleries">
+    {{ range where .Pages "Params.featured" "=" true }}
+      {{ partial "album-card.html" . }}
+    {{ end }}
+    {{ range where (where .Pages "Params.private" "ne" true) "Params.featured" "ne" true }}
+      {{ partial "album-card.html" . }}
+    {{ end }}
+  </section>
+{{ end }}

@@ -1,0 +1,16 @@
+{
+  "private": "true",
+  "scripts": {
+    "build": "hugo --gc --minify",
+    "dev": "hugo server",
+    "content:prune-images": "node scripts/sync-content-images.mjs prune",
+    "content:add-src": "node scripts/sync-content-images.mjs add-src"
+  },
+  "name": "aoba",
+  "version": "1.0.0",
+  "description": "## License",
+  "main": "prettier.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

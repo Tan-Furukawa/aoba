@@ -1,0 +1,17 @@
+{{ $files := slice }}
+{{ $dir := .dir }}
+
+{{ range readDir $dir }}
+  {{ $path := printf "%s/%s" $dir .Name }}
+  {{ if .IsDir }}
+    {{ if ne $path "content/tag" }}
+      {{ range partial "get-content-files.html" (dict "dir" $path) }}
+        {{ $files = $files | append . }}
+      {{ end }}
+    {{ end }}
+  {{ else if strings.HasSuffix .Name ".md" }}
+    {{ $files = $files | append $path }}
+  {{ end }}
+{{ end }}
+
+{{ return $files }}

@@ -1,0 +1,48 @@
+copyright = "© 2026 FT"
+defaultContentLanguage = "en"
+disableKinds = ["taxonomy"]
+enableRobotsTXT = true
+languageCode = "en"
+timeZone = "Europe/Berlin"
+timeout = "120s"
+title = "仙台森さんぽ"
+
+[params]
+  defaultTheme = "dark"
+  description = "仙台市青葉山の森で撮影した写真ギャラリー"
+  # Options: noto-serif-jp, zen-old-mincho, shippori-mincho, kaisei-tokumin, m-plus-rounded-1c
+  homeTitleFont = "m-plus-rounded-1c"
+  title = "仙台森さんぽ"
+  [params.author]
+    name = "FT"
+  [params.socialIcons]
+    github = "https://github.com/"
+    email = "mailto:example@example.com"
+  [params.gallery]
+    #boxSpacing = 10
+    #targetRowHeight = 288
+    #targetRowHeightTolerance = 0.25
+
+[outputs]
+  home = ["HTML", "RSS"]
+  page = ["HTML"]
+  section = ["HTML"]
+
+[taxonomies]
+  category = "categories"
+
+[imaging]
+  quality = 75
+  resampleFilter = "CatmullRom"
+  [imaging.exif]
+    disableDate = false
+    disableLatLong = true
+    includeFields = "ImageDescription|Orientation|Model|LensModel|LensMake|LensInfo|Lens|ExposureTime|FNumber|ApertureValue|PhotographicSensitivity|ISOSpeedRatings|RecommendedExposureIndex|FocalLength|DateTimeOriginal"
+
+[module]
+  [module.hugoVersion]
+    min = "0.121.2"
+
+[services]
+  [services.rss]
+    limit = 100

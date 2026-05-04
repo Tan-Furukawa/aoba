@@ -1,0 +1,27 @@
+{{ $categories := site.Taxonomies.categories }}
+{{ $tags := partial "get-image-tags.html" . }}
+
+{{ if or $categories $tags }}
+  <section class="taxonomy-groups">
+    {{ with $categories }}
+      <nav class="categories" aria-label="categories">
+        <ul>
+          {{ range . }}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a></li>
+          {{ end }}
+        </ul>
+      </nav>
+    {{ end }}
+
+    {{ with $tags }}
+      <div class="tag-group">
+        <h2>tags</h2>
+        <nav class="tags" aria-label="tags">
+          <ul>
+            <li><a href="{{ "tag/" | relURL }}">all tags</a></li>
+          </ul>
+        </nav>
+      </div>
+    {{ end }}
+  </section>
+{{ end }}

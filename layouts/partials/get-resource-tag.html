@@ -1,0 +1,19 @@
+{{ $tag := "" }}
+{{ $page := .page }}
+{{ $image := .image }}
+{{ $imageSrc := path.Base $image.RelPermalink }}
+
+{{ range $resource := $page.Params.resources }}
+  {{ if or (eq (index $resource "src") $image.Name) (eq (index $resource "src") $imageSrc) }}
+    {{ with index $resource "tag" }}
+      {{ $tag = strings.TrimSpace (printf "%v" .) }}
+    {{ end }}
+    {{ with index $resource "params" }}
+      {{ with index . "tag" }}
+        {{ $tag = strings.TrimSpace (printf "%v" .) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ return $tag }}

@@ -1,0 +1,29 @@
+/* custom.css */
+
+html {
+  font-family: "M PLUS Rounded 1c", ui-sans-serif, system-ui, sans-serif;
+}
+
+section.home-hero h1 {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
+section.home-hero.font-noto-serif-jp h1 {
+  font-family: "Noto Serif JP", serif;
+}
+
+section.home-hero.font-zen-old-mincho h1 {
+  font-family: "Zen Old Mincho", serif;
+}
+
+section.home-hero.font-shippori-mincho h1 {
+  font-family: "Shippori Mincho", serif;
+}
+
+section.home-hero.font-kaisei-tokumin h1 {
+  font-family: "Kaisei Tokumin", serif;
+}
+
+section.home-hero.font-m-plus-rounded-1c h1 {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}

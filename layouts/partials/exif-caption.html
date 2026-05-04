@@ -1,0 +1,94 @@
+{{ $rows := slice }}
+{{ $image := .image | default . }}
+{{ $page := .page | default nil }}
+{{ $resourceMeta := dict }}
+
+{{ with $page }}
+  {{ $imageSrc := path.Base $image.RelPermalink }}
+  {{ range $resource := .Params.resources }}
+    {{ if or (eq (index $resource "src") $imageSrc) (eq (index $resource "src") $image.Name) }}
+      {{ $resourceMeta = $resource }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ with index $resourceMeta "title" }}
+  {{ $rows = $rows | append (dict "value" .) }}
+{{ end }}
+
+{{ with index $resourceMeta "name" }}
+  {{ $rows = $rows | append (dict "value" .) }}
+{{ end }}
+
+{{ with or (index $resourceMeta "place") (index (index $resourceMeta "params") "place") }}
+  {{ $rows = $rows | append (dict "value" .) }}
+{{ end }}
+
+{{ with $image.Exif }}
+  {{ $tags := .Tags }}
+
+  {{ with $tags.Model }}
+    {{ $rows = $rows | append (dict "label" "Camera" "value" .) }}
+  {{ end }}
+
+  {{ with or $tags.LensModel $tags.Lens $tags.LensInfo $tags.LensMake }}
+    {{ $rows = $rows | append (dict "label" "Lens" "value" .) }}
+  {{ end }}
+
+  {{ with $tags.ExposureTime }}
+    {{ $rows = $rows | append (dict "label" "Exposure" "value" (printf "%s s" .)) }}
+  {{ end }}
+
+  {{ $aperture := "" }}
+  {{ with $tags.FNumber }}
+    {{ $parts := split (printf "%v" .) "/" }}
+    {{ if eq (len $parts) 2 }}
+      {{ $aperture = printf "F%.1f" (div (float (index $parts 0)) (float (index $parts 1))) }}
+    {{ else }}
+      {{ $aperture = printf "F%s" . }}
+    {{ end }}
+  {{ else }}
+    {{ with $tags.ApertureValue }}
+      {{ $aperture = printf "F%s" . }}
+    {{ end }}
+  {{ end }}
+  {{ with $aperture }}
+    {{ $rows = $rows | append (dict "label" "Aperture" "value" .) }}
+  {{ end }}
+
+  {{ with or $tags.PhotographicSensitivity $tags.ISOSpeedRatings $tags.RecommendedExposureIndex }}
+    {{ $rows = $rows | append (dict "label" "ISO" "value" .) }}
+  {{ end }}
+
+  {{ with $tags.FocalLength }}
+    {{ $parts := split (printf "%v" .) "/" }}
+    {{ $focalLength := printf "%v" . }}
+    {{ if eq (len $parts) 2 }}
+      {{ $focalLength = printf "%.0f" (div (float (index $parts 0)) (float (index $parts 1))) }}
+    {{ end }}
+    {{ $rows = $rows | append (dict "label" "Focal" "value" (printf "%s mm" $focalLength)) }}
+  {{ end }}
+
+  {{ with .Date }}
+    {{ $rows = $rows | append (dict "label" "Created" "value" (time.Format "2006.01.02 15:04:05" .)) }}
+  {{ end }}
+{{ end }}
+
+{{ with partial "get-resource-tag.html" (dict "page" $page "image" $image) }}
+  {{ $tagURL := printf "tag/%s/" . | relURL }}
+  {{ $tagLink := printf `<a href="%s">%s</a>` $tagURL . }}
+  {{ $rows = $rows | append (dict "label" "Tag" "value" $tagLink) }}
+{{ end }}
+
+{{ with $rows }}
+  <dl class="exif-caption">
+    {{ range . }}
+      <div{{ if not .label }} class="is-unlabeled"{{ end }}>
+        {{ with .label }}
+          <dt>{{ . }}</dt>
+        {{ end }}
+        <dd>{{ .value | safeHTML }}</dd>
+      </div>
+    {{ end }}
+  </dl>
+{{ end }}

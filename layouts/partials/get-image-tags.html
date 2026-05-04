@@ -1,0 +1,11 @@
+{{ $tags := slice }}
+
+{{ range $page := where site.RegularPages "Params.private" "ne" true }}
+  {{ range $image := where ($page.Resources.ByType "image") "Params.hidden" "ne" true }}
+    {{ with partial "get-resource-tag.html" (dict "page" $page "image" $image) }}
+      {{ $tags = $tags | append . }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ return ($tags | uniq | sort) }}
