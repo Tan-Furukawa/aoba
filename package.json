@@ -4,7 +4,12 @@
     "build": "hugo --gc --minify",
     "dev": "hugo server",
     "content:prune-images": "node scripts/sync-content-images.mjs prune",
-    "content:add-src": "node scripts/sync-content-images.mjs add-src"
+    "content:add-src": "node scripts/sync-content-images.mjs add-src",
+    "content:delete-images": "node scripts/delete-content-images.mjs",
+    "content:resize-images": "node scripts/resize-content-images.mjs",
+    "content:resize-images:preview": "node scripts/resize-content-images.mjs --preview",
+    "content:watermark-images": "cd utils/invisible-watermark && uv run python watermark.py embed-missing ../../content",
+    "r2:upload-content-images": "node scripts/upload-content-images-to-r2.mjs"
   },
   "name": "aoba",
   "version": "1.0.0",
@@ -12,5 +17,9 @@
   "main": "prettier.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "wrangler": "^4.87.0"
+  }
 }
